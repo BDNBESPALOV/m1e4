@@ -1,13 +1,12 @@
 package ttt;
-
 import java.util.*;
-
-
 
 public class LinkedList<T> implements List<T> {
 
     private Item<T> firstInList = null;
     private Item<T> lastInList_TEMP1=null;
+    private Item<T> firstInList_TEMP11 = null;
+    private Item<T> lastInList_TEMPRem=null;
     private Item<T> lastInList = null;
     private boolean first=false;
     private boolean f=true;
@@ -17,7 +16,7 @@ public class LinkedList<T> implements List<T> {
 
     @Override
     public int size() {
-        return this.size;
+        return size;
     }
 
     @Override
@@ -28,9 +27,11 @@ public class LinkedList<T> implements List<T> {
     @Override
     public boolean contains(final Object o) {
         // BEGIN (write your solution here)
+
         if(o==null ){
+
             for(int i=0;i<size;i++){
-                System.out.println("-----III--++i"+get(i)+" "+size);
+
                 if(get(i)==null){
                     return true;
                 }
@@ -39,8 +40,8 @@ public class LinkedList<T> implements List<T> {
         }
 
         for(int i=0;i<size;i++){
-            System.out.println("-----III--"+get(i)+" "+size);
-            if(o.equals(this.get(i))){
+            System.out.println("contains"+o+" g"+get(i));
+            if(o.equals(get(i))){
                 return true;
             }
 
@@ -59,41 +60,49 @@ public class LinkedList<T> implements List<T> {
         // BEGIN (write your solution here)
         T[] m=(T[]) new Object[size];
         for(int i=0;i<size;i++){
-          m[i]=this.get(i);
+            m[i]=get(i);
         }
         return m;
         // END
     }
 
     @Override
-    public <T1> T1[] toArray(T1[] a) {
+    public <T1> T1[] toArray(T1[] aa) {
         // BEGIN (write your solution here)
-        m= (T[]) this.toArray();
-        int newsize;
-        if(a==null){
-            throw new NullPointerException();
-        }
-        if(size<a.length){
-            newsize=a.length;
-        } else {
-            newsize=size;
+        m= (T[]) toArray();
+        //  int ch=aa.length;
+        if(aa.length==m.length){
+            return aa;
         }
 
+//        for(int i=0;i<aa.length;i++){
+//
+//
+//            if( aa[i]==null){
+//                ch--;
+//            }
+//            if(ch==0){
+//                return aa;
+//            }
+//
+//        }
 
-        T1[] m1=(T1[]) new Object[newsize];
-        int ni=0;
-        for(T i:m){
-            for(T1 q:a){
-                if(i.equals(q)){
-                    if(ni<size){
-                        m1[ni++]=q;
-                    }else {
-                       m1= Arrays.copyOf(m1,newsize);
-                    }
-                }
-            }
+
+
+        m= (T[]) toArray();
+
+        /*если размер входящего массива меньше размера текущего
+         * то уделить размер  входящего до размера текущего
+         * */
+        if (aa.length <= m.length){
+
+            aa=  Arrays.copyOf(aa, size);}
+        /*скопировать все элементы из текущего, в входящий  */
+        System.arraycopy(m, 0, aa, 0, size);
+        if (aa.length > m.length){
+            aa[size] = null;
         }
-        return m1;
+        return aa;
 
         // END
     }
@@ -101,6 +110,8 @@ public class LinkedList<T> implements List<T> {
     @Override
     public boolean add(final T newElement) {
         // BEGIN (write your solution here)
+
+        System.out.println("Add "+newElement);
         Item<T> newitems=new Item<>(newElement,lastInList,firstInList,size);
         if(f){
             newitems.prevItem=newitems.nextItem=newitems;
@@ -113,34 +124,54 @@ public class LinkedList<T> implements List<T> {
         lastInList=newitems;
         size++;
         return true;
-         // END
+        // END
     }
 
     @Override
     public boolean remove(final Object o) {
 
         // BEGIN (write your solution here)
+        if(o.equals(lastInList.element)) {
+            if(size>0){
+                lastInList_TEMP1 = lastInList.getPrevItem();
+            }else {
+                lastInList.nextItem=null;
+                lastInList.prevItem=null;
+                lastInList.element=null;
+                size--;
+                return true;
+            }
+
+        }else if(o.equals(firstInList.element)){
+
+            firstInList_TEMP11=firstInList.nextItem;
+            firstInList.nextItem.prevItem=firstInList.nextItem;
+            lastInList.nextItem=firstInList.nextItem;
+            firstInList.nextItem=null;
+            firstInList.element=null;
+            firstInList=firstInList_TEMP11;
+            size--;
+            return true;
+        }
+        else {
+            lastInList_TEMP1 = lastInList;
+        }
+
         for(int i=0;i<size;i++){
             if(o!=null){
-
             }
-            System.out.println("-----III---O---"+lastInList.element);
-            //   System.out.println("-----III---T----"+lastInList.element);
-
             if(o.equals(lastInList.element)){
-                System.out.println("-----III--------");
                 lastInList.nextItem.prevItem=lastInList.prevItem;
                 lastInList.prevItem.nextItem=lastInList.nextItem;
-                lastInList_TEMP1=lastInList.prevItem;
                 lastInList.nextItem=lastInList.prevItem=null;
                 lastInList.element=null;
-                lastInList=lastInList_TEMP1;
                 size--;
                 break;
 
             }
             lastInList=lastInList.getNextItem();
         }
+        lastInList=lastInList_TEMP1;
 
         return true; //////////END
 
@@ -149,8 +180,8 @@ public class LinkedList<T> implements List<T> {
 
     @Override
     public boolean containsAll(final Collection<?> c) {
-        for (final Object item : c) {
-            if (!this.contains(item)) return false;
+        for (int i=0;i<size;i++) {
+            if (!this.contains(get(i))) return false;
         }
         return true;
     }
@@ -165,16 +196,19 @@ public class LinkedList<T> implements List<T> {
 
     @Override
     public boolean removeAll(final Collection<?> c) {
-        for (final Object item : c) {
-            remove(item);
+        T[] a= (T[]) c.toArray();
+        for (Object i: a) {
+
+            remove(i);
         }
         return true;
     }
 
     @Override
     public boolean retainAll(final Collection<?> c) {
-        for (final T item : this) {
-            if (!c.contains(item)) this.remove(item);
+        for (int i=0;i<size;i++) {
+            if (!c.contains(get(i))) {
+                this.remove(get(i));}
         }
         return true;
     }
@@ -191,10 +225,16 @@ public class LinkedList<T> implements List<T> {
     @Override
     public T remove(final int index) throws IndexOutOfBoundsException{
         // BEGIN (write your solution here)
-        remove(get(index));
+        T e=get(index);
+        System.out.println("remove "+e);
+        remove(e);
+
+        for (int i=0;i<size;i++){
+            System.out.println("r_"+get(i)+" "+i);
+        }
 
 
-        return (T) lastInList_TEMP1; //////////END
+        return  e; //////////END
         // END
     }
 
@@ -232,22 +272,21 @@ public class LinkedList<T> implements List<T> {
 
         for(int i=0;i<size;i++){
             Object r=get(i);
-            System.out.println("E"+r+" "+i);
-//            if(r==null){
-//                if(o.equals(r)){
-//
-//                    return i;
-//                }
-//            } else  if(r.equals(o)){
-//
-//                return i;
-//            }
+
+            if(r==null){
+                if(o.equals(r)){
+
+                    return i;
+                }
+            } else  if(r.equals(o)){
+
+                return i;
+            }
 
         }
 
-        System.out.println("--------------- ");
         return -1;
- //////////END
+        //////////END
         // END
     }
 
@@ -264,7 +303,28 @@ public class LinkedList<T> implements List<T> {
     @Override
     public T set(final int index, final T element) {
         // BEGIN (write your solution here)
-        return m[1]; //////////END
+        if(index < 0 || index >= size()){
+            throw new IndexOutOfBoundsException();
+        }
+        T elementF = null;
+        T elementI = get(index);
+        Item<T> lastInList_T=lastInList;
+        for(int i=0;i<size;i++){
+            if(elementI.equals(lastInList.element)){
+
+                elementF=lastInList.element;
+                lastInList.element =element;
+
+                break;
+
+            }
+            lastInList=lastInList.getNextItem();
+        }
+        lastInList=lastInList_T;
+
+
+
+        return  elementF; //////////END
         // END
     }
 
@@ -272,28 +332,22 @@ public class LinkedList<T> implements List<T> {
     public T get(final int in) {
         // BEGIN (write your solution here)
         if(in>=size || in <0){
-            System.out.println("FAAAACK!!!");
+            throw new IndexOutOfBoundsException();
         }
-        Item<T> element=lastInList;
+        Item<T> el=lastInList;
         if(in<1){
             //System.out.println("firstInList.element");
             return firstInList.element;
         }
         if(in==size-1){
-           // System.out.println("lastInList.element");
+            //  System.out.println("lastInList.element");
             return lastInList.element;
         }
-        if(in<(size/2)){
-            for(int i=0;i<(size-in-1)/*2*/;i++){
-                element=element.getNextItem();
-            }
-
-        }else {
-            for(int i=in;i<size;i++){
-                element=element.getNextItem();
-            }
+        int y=size-in-1;
+        for(int i=0;i<size-y;i++){
+            el=el.getNextItem();
         }
-        return  element.element;
+        return  el.element;
         // END
     }
 
@@ -305,14 +359,23 @@ public class LinkedList<T> implements List<T> {
 
     private class ElementsIterator implements ListIterator<T> {
 
-        private Item<T> currentItemInIterator;
+        private Item<T>  currentItemInIterator=lastInList;
 
         private Item<T> lastReturnedItemFromIterator;
+        int n;
+
+
 
         private int index;
+        private boolean check=false;
 
         ElementsIterator(final int index) {
             // BEGIN (write your solution here)
+            this.index=index;
+            for (int i=0;i<index;i++){
+                //   currentItemInIterator=lastInList.getNextItem();
+            }
+
 
             // END
         }
@@ -320,53 +383,101 @@ public class LinkedList<T> implements List<T> {
         @Override
         public boolean hasNext() {
             // BEGIN (write your solution here)
-            return true; //////////END
+
+            return size>index;
             // END
         }
 
         @Override
         public T next() {
             // BEGIN (write your solution here)
-            return m[1]; //////////END
+            n++;
+            check=true;
+            index++;
+            currentItemInIterator=lastInList;
+
+            if(size==0){
+
+                throw new NoSuchElementException();
+            }
+            return currentItemInIterator.element;
             // END
         }
 
         @Override
         public boolean hasPrevious() {
             // BEGIN (write your solution here)
-            return true; //////////END
+            try{
+
+                if(index>0){
+                    previous();
+                    return true;
+                }
+                return false;
+            }catch (Exception e){
+                return false;
+            }
             // END
         }
 
         @Override
         public T previous() {
             // BEGIN (write your solution here)
-            return m[1]; //////////END
+            n--;
+            check=true;
+            index--;
+            lastReturnedItemFromIterator=currentItemInIterator;
+            if(currentItemInIterator==null){
+                throw new NoSuchElementException();
+            }
+            return lastReturnedItemFromIterator.element; //////////END
             // END
         }
 
         @Override
         public void add(final T element) {
+            check=false;
             throw new UnsupportedOperationException();
         }
 
         @Override
         public void set(final T element) {
-            // BEGIN (write your solution here)
+            // BEGIN (write your solution here).
+            if(check){
+                System.out.println(n+"!!!!!!!!!!"+index+" si"+size);
+                // lastInList.getNextItem().getNextItem().getNextItem().element=element;
+                lastInList_TEMPRem=LinkedList.this.lastInList;
+                for(int i=0;i<size;i++){
 
+                    LinkedList.this.lastInList=LinkedList.this.lastInList.getNextItem();
+                    if(i==(n)){
+
+                        LinkedList.this.lastInList.getNextItem().element=element;
+                        System.out.println("lastInList.element!! "+LinkedList.this.lastInList.element);
+                        break;
+                    }
+                }
+                LinkedList.this.lastInList=lastInList_TEMPRem;
+                n++;
+            } else {
+                throw new IllegalStateException();
+            }
             // END
         }
 
         @Override
         public int previousIndex(){
             // BEGIN (write your solution here)
-            return 1; //////////END
+            if(index>0){
+                return index-1;
+            }else
+                return -1; //////////END
             // END
         }
         @Override
         public int nextIndex() {
             // BEGIN (write your solution here)
-            return 1; //////////END
+            return index; //////////END
             // END
         }
 
@@ -374,6 +485,38 @@ public class LinkedList<T> implements List<T> {
         @Override
         public void remove() {
             // BEGIN (write your solution here)
+            if(size==0){
+                throw new UnsupportedOperationException();
+            }
+            if( index==0 ){
+                throw new IllegalStateException();
+            }
+
+
+
+
+            if (size==1){
+                currentItemInIterator.element=null;
+                currentItemInIterator.nextItem=null;
+                check=false;
+                index--;
+                size--;
+            } else {
+                currentItemInIterator.nextItem.prevItem=currentItemInIterator.prevItem;
+                currentItemInIterator.prevItem.nextItem=currentItemInIterator.nextItem;
+                lastInList_TEMP1=currentItemInIterator.prevItem;
+                currentItemInIterator.nextItem=currentItemInIterator.prevItem=null;
+                currentItemInIterator.element=null;
+                lastInList=lastInList_TEMP1;
+                check=false;
+                index--;
+                size--;
+            }
+
+
+
+
+
 
             // END
         }

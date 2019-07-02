@@ -144,7 +144,7 @@ public class LinkedListTest {
         testInstance2.add(2);
         testInstance2.add(1);
 
-        assertTrue(testInstance.containsAll(testInstance2));
+       assertTrue(testInstance.containsAll(testInstance2));
     }
 
     @Test
@@ -502,7 +502,8 @@ public class LinkedListTest {
 
         try {
             listIterator.set(null);
-            fail("set method do not throw IllegalStateException the if neither next nor previous have been called");
+            fail("set method do not throw IllegalStateException the " +
+                    "if neither next nor previous have been called");
         } catch (final IllegalStateException e){}
     }
 
@@ -593,7 +594,7 @@ public class LinkedListTest {
         listIterator.next();
         listIterator.next();
         listIterator.previous();
-        listIterator.remove();
+       listIterator.remove();
     }
 
     @Test
