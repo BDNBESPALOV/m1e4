@@ -5,19 +5,24 @@ import java.util.*;
 public class ArrayBasedMap<K, V> implements Map<K, V> {
 
     private List<Pair> KayAndValues = new ArrayList<Pair>();
+    int size=KayAndValues.size();
 
     @Override
     public int size() {
         // BEGIN (write your solution here)
-        return KayAndValues.size();
+        if(size>Integer.MAX_VALUE){
+            return Integer.MAX_VALUE;
+        }else {
 
+            return size;
+        }
         // END
     }
 
     @Override
     public boolean isEmpty() {
         // BEGIN (write your solution here)
-        return false;
+        return size()==0;
 
         // END
     }
@@ -25,7 +30,7 @@ public class ArrayBasedMap<K, V> implements Map<K, V> {
     @Override
     public boolean containsKey(Object key) {
         // BEGIN (write your solution here)
-        return false;
+        return get(key)!=null;
 
         // END
     }
@@ -33,6 +38,13 @@ public class ArrayBasedMap<K, V> implements Map<K, V> {
     @Override
     public boolean containsValue(Object value) {
         // BEGIN (write your solution here)
+        for(int i=0;i<size();i++){
+            Pair p=KayAndValues.get(i);
+            V pv=p.value;
+            if(value.equals(pv)){
+                return true;
+            }
+        }
         return false;
 
         // END
@@ -90,6 +102,15 @@ public class ArrayBasedMap<K, V> implements Map<K, V> {
     public void clear() {
         // BEGIN (write your solution here)
 
+
+        for(int i=0;i<size;i++){
+          //  KayAndValues.add();
+
+        }
+        KayAndValues.clear();
+     //   KayAndValues=new ArrayList<>();
+
+size=0;
         // END
     }
 
@@ -103,7 +124,12 @@ public class ArrayBasedMap<K, V> implements Map<K, V> {
     @Override
     public Collection<V> values() {
         // BEGIN (write your solution here)
-        return (Collection<V>) this;
+        ArrayList<V> e=new ArrayList<V>();
+
+        for(int i=0;i<size();i++){
+            e.add(KayAndValues.get(i).value);
+        }
+        return e;
 
         // END
     }
