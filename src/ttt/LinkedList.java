@@ -16,8 +16,9 @@ public class LinkedList<T> implements List<T> {
 
     @Override
     public int size() {
-        return size;
+        return size ;
     }
+
 
     @Override
     public boolean isEmpty() {

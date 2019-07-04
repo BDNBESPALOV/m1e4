@@ -5,8 +5,10 @@ import java.util.*;
 public class ArrayBasedMap<K, V> implements Map<K, V> {
 
     private List<Pair> KayAndValues = new ArrayList<Pair>();
-    int size=KayAndValues.size();
-
+    ArrayList<Pair> ip=new ArrayList<>();
+    private List<ArrayList<Pair>> klv = new ArrayList<>();
+   // int size=KayAndValues.size();
+   int size;
     @Override
     public int size() {
         // BEGIN (write your solution here)
@@ -53,13 +55,34 @@ public class ArrayBasedMap<K, V> implements Map<K, V> {
     @Override
     public V get(Object key) {
         // BEGIN (write your solution here)
-        for(int i=0;i<KayAndValues.size();i++){
-            Pair p=KayAndValues.get(i);
-            K pk=p.key;
-            if(key.equals(pk)){
+//        for(int i=0;i<KayAndValues.size();i++){
+//            Pair p=KayAndValues.get(i);
+//            K pk=p.key;
+//            if(key.equals(pk)){
+//                return  p.getValue();
+//            }
+//        }
+
+            if (key.hashCode() % 2 == 0) {
+                for(int i=0;i<klv.size();i++) {
+                    Pair p=ip.get(i);
+                   K pk=p.key;
+               if(key.equals(pk)){
                 return  p.getValue();
             }
-        }
+                }
+            } else {
+                for(int i=0;i<klv.size();i++) {
+                    Pair p=ip.get(i);
+                    K pk=p.key;
+                    if(key.equals(pk)){
+                        return  p.getValue();
+                    }
+                }
+
+            }
+
+
         return null;
 
         // END
@@ -68,10 +91,43 @@ public class ArrayBasedMap<K, V> implements Map<K, V> {
     @Override
     public V put(K key, V value) {
         // BEGIN (write your solution here)
+//        V vel=get(key);
+//        if(get(key)!=null){
+//            remove(key);
+//            KayAndValues.add(new Pair(key,value));
+//            size++;
+//            return vel;
+//        }
+//        KayAndValues.add(new Pair(key,value));
+//        size++;
 
-        KayAndValues.add(new Pair(key,value));
+        if(get(key)!=null) {
+            remove(key);
+            if (key.hashCode() % 2 == 0) {
 
-        return (V) this;
+                ip.add(new Pair(key, value));
+                klv.add(0, ip);
+                size++;
+            } else {
+                ip.add(new Pair(key, value));
+                klv.add(1, ip);
+                size++;
+            }
+        } else {
+            if (key.hashCode() % 2 == 0) {
+                ip.add(new Pair(key, value));
+                klv.add(0, ip);
+                size++;
+            } else {
+                ip.add(new Pair(key, value));
+                klv.add(1, ip);
+                size++;
+            }
+        }
+
+
+
+        return null;
 
         // END
     }
@@ -83,8 +139,17 @@ public class ArrayBasedMap<K, V> implements Map<K, V> {
         if(vel==null){
             return null;
         }
+////        KayAndValues.remove(new Pair((K) key,vel));
+//        size--;
 
-        KayAndValues.remove(new Pair((K) key,vel));
+        if (key.hashCode() % 2 == 0) {
+            klv.get(0).remove(new Pair((K) key,vel));
+            size--;
+        } else {
+            klv.get(0).remove(new Pair((K) key,vel));
+            size--;
+        }
+
 
 
         return vel;

@@ -11,6 +11,9 @@ public class Test<T> {
             }
         }};
     }
+    Student getValueNotInPopulatedMap() {
+        return new Student("notInMap");
+    }
 
     static int hash(int h)
     {
@@ -24,41 +27,47 @@ public class Test<T> {
     public static void main(String [] args){
         Test test=new Test();
         ArrayBasedMap arrayBasedMap =new ArrayBasedMap();
+        int sizes=10000;
+        for(int ip=0;ip<5;ip++) {
+            arrayBasedMap =new ArrayBasedMap();
+            int is = (int) new Date().getTime();
+            // System.out.println(is);
+            System.out.println("--------------");
+            for (int i = 0; i < sizes; i++) {
+                arrayBasedMap.put(i, "O" + i);
 
-        for(int i=0;i<1000;i++){
-            arrayBasedMap.put(i,"O"+i);
-
-        }
-        System.out.println("--------------");
-        for(int i=0;i<100;i++){
-            if(i*2<20){
-              //  System.out.println(arrayBasedMap.get(i*2));
-             //   arrayBasedMap.remove(i*2);
             }
+            int isl = (int) new Date().getTime();
+            System.out.println(isl - is + " put ");
+            is = (int) new Date().getTime();
+
+            for (int i = 0; i < sizes; i++) {
+                arrayBasedMap.get(i);
+            }
+            isl = (int) new Date().getTime();
+            System.out.println(isl - is + " get ");
+            System.out.println("--------------");
         }
-        System.out.println("--------------");
-
-
-        Map<String, Student> map =test.makePopulatedMap();
-        map.clear();
-        Set<String> keySet = map.keySet();
-       // arrayBasedMap.size();
-        for(int i=0;i<5;i++){
-            System.out.println(keySet.size()+"  "+map.size());
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
+
+//--------------
+//        444 put
+//        215 get
+//        --------------
+//        --------------
+//        450 put
+//        204 get
+//        --------------
+//        --------------
+//        323 put
+//        149 get
+//        --------------
+//        --------------
+//        290 put
+//        142 get
+//        --------------
+//        --------------
+//        299 put
+//        144 get
+//        --------------

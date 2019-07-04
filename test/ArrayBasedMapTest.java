@@ -146,11 +146,16 @@ public class ArrayBasedMapTest {
      * @param map the map to check.
      */
     protected final void assertInvariants(Map<String, Student> map) {
+
         Set<String> keySet = map.keySet();
         Collection<Student> valueCollection = map.values();
         Set<Map.Entry<String, Student>> entrySet = map.entrySet();
 
+        //
+
+
         assertEquals(map.size() == 0, map.isEmpty());
+        System.out.println(map.keySet().size()+"  "+map.size());
         assertEquals(map.size(), keySet.size());
         assertEquals(keySet.size() == 0, keySet.isEmpty());
         assertEquals(!keySet.isEmpty(), keySet.iterator().hasNext());
